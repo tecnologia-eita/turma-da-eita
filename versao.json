@@ -1,0 +1,11 @@
+{
+  "versao": "0.1.2",
+  "data": "2026-11-09",
+  "base": "https://github.com/tecnologia-eita/turma-da-eita/releases/download/v0.1.2/",
+  "arquivos": {
+    "TurmaDaEita-Android.apk": 35217593,
+    "TurmaDaEita-Linux.AppImage": 138379911,
+    "TurmaDaEita-Windows-instalador.exe": 109728682,
+    "TurmaDaEita-Windows.exe": 109485177
+  }
+}
