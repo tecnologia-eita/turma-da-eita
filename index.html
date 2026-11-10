@@ -1,0 +1,454 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Baixar o jogo · Turma da Eita</title>
+<meta name="description" content="A lanchonete da Turma da Eita para Windows, Mac, Linux, Android e iPhone.">
+<!-- fora da busca enquanto o jogo não é lançado (o site do jogo também está assim) -->
+<meta name="robots" content="noindex">
+<meta name="theme-color" content="#ed762f">
+<meta property="og:title" content="A Lanchonete da Turma">
+<meta property="og:description" content="O jogo da Turma da Eita para baixar no computador e no celular.">
+<meta property="og:image" content="https://tecnologia-eita.github.io/turma-da-eita/imagens/compartilhar.jpg">
+<meta property="og:type" content="website">
+<link rel="icon" href="imagens/icone-32.png" sizes="32x32">
+<link rel="apple-touch-icon" href="imagens/icone-180.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@700;800;900&display=swap" rel="stylesheet">
+<style>
+  :root {
+    color-scheme: light;
+    --laranja: #ed762f;
+    --laranja-claro: #f8a35e;
+    --laranja-escuro: #b44e16;
+    --papel: #fbf3e2;
+    --branco: #fffdf8;
+    --borda: #f0dfc0;
+    --tinta: #1f1510;
+    --texto: #3a2414;
+    --texto-2: #6e5a4a;
+    --rosa: #f2a3b5;
+    --rosa-forte: #f0567a;
+    --menta: #9fdcbf;
+    --menta-forte: #2f8f6a;
+    --amarelo: #ffd84a;
+    --ouro: #f6c453;
+    --azul: #9ccff0;
+    --raio: 22px;
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0; background: var(--papel); color: var(--texto);
+    font: 700 17px/1.5 "Nunito", ui-rounded, "Varela Round", system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+  img { max-width: 100%; display: block; }
+  a { color: inherit; }
+  :focus-visible { outline: 4px solid var(--tinta); outline-offset: 3px; border-radius: 12px; }
+
+  /* ---------- o topo: o papel laranja do jogo, com as fitas do menu ---------- */
+  .topo {
+    position: relative; overflow: hidden; color: var(--texto);
+    background:
+      radial-gradient(ellipse 55% 75% at 22% 30%, rgba(248, 163, 94, 0.95), transparent 70%),
+      radial-gradient(ellipse 45% 60% at 85% 80%, rgba(217, 96, 31, 0.35), transparent 70%),
+      var(--laranja);
+    padding: 0 16px 72px;
+  }
+  .fitas { position: absolute; pointer-events: none; width: 300px; height: 300px; }
+  .fitas.esq { left: -120px; top: -110px; }
+  .fitas.dir { right: -110px; bottom: -120px; transform: rotate(180deg); opacity: 0.9; }
+  .topo-dentro {
+    position: relative; max-width: 1120px; margin: 0 auto; padding-top: 56px;
+    display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr); gap: 40px; align-items: center;
+  }
+  .marca { display: flex; align-items: center; gap: 14px; margin-bottom: 18px; }
+  .icone {
+    width: 84px; height: 84px; border-radius: 24px; border: 4px solid var(--branco);
+    box-shadow: 0 5px 0 var(--laranja-escuro), 0 10px 24px rgba(90, 35, 5, 0.25); transform: rotate(-4deg);
+  }
+  .marca p { margin: 0; font-weight: 900; font-size: 15px; letter-spacing: 0.08em; text-transform: uppercase; color: #5a2a0c; }
+  h1 {
+    margin: 0 0 14px; font-weight: 900; font-size: clamp(40px, 6.2vw, 68px); line-height: 1.02; color: #fff;
+    text-shadow: 0 4px 0 var(--laranja-escuro), 0 9px 18px rgba(90, 35, 5, 0.25); letter-spacing: -0.01em;
+  }
+  .chamada { margin: 0 0 26px; font-size: 20px; line-height: 1.45; color: #3b1a07; max-width: 30em; }
+  .botao {
+    display: inline-flex; align-items: center; gap: 12px; text-decoration: none; cursor: pointer;
+    font-family: inherit; font-weight: 900; font-size: 18px; line-height: 1.1; color: #fff; background: var(--laranja);
+    padding: 15px 24px; border-radius: 999px; border: 0;
+    box-shadow: 0 5px 0 var(--laranja-escuro); transition: transform 0.12s, box-shadow 0.12s;
+  }
+  .botao:hover { transform: translateY(-2px); box-shadow: 0 7px 0 var(--laranja-escuro); }
+  .botao:active { transform: translateY(3px); box-shadow: 0 2px 0 var(--laranja-escuro); }
+  .botao svg { width: 22px; height: 22px; flex: none; }
+  /* o botão grande: o "jogar" branco com aro dourado do menu do jogo */
+  .botao.grande {
+    font-size: 22px; padding: 18px 32px 18px 26px; color: #c2531a; background: var(--branco);
+    border: 6px solid var(--ouro); box-shadow: 0 6px 0 var(--laranja-escuro), 0 14px 28px rgba(90, 35, 5, 0.25);
+  }
+  .botao.grande:hover { box-shadow: 0 8px 0 var(--laranja-escuro), 0 16px 30px rgba(90, 35, 5, 0.25); }
+  .botao.grande:active { box-shadow: 0 2px 0 var(--laranja-escuro); }
+  .botao.grande svg { width: 28px; height: 28px; }
+  .detalhe { margin: 14px 0 0; font-size: 15px; color: #4a2209; min-height: 1.5em; }
+  .outros { margin: 6px 0 0; font-size: 16px; color: #4a2209; }
+  .outros a { font-weight: 900; text-decoration-thickness: 2px; text-underline-offset: 3px; }
+
+  .vitrine { position: relative; padding: 10px 6px 70px; }
+  .foto {
+    position: relative; margin: 0; background: var(--branco); padding: 10px; border-radius: 18px;
+    box-shadow: 0 6px 0 rgba(120, 50, 10, 0.25), 0 20px 40px rgba(90, 35, 5, 0.25);
+  }
+  .foto img { border-radius: 10px; width: 100%; height: auto; }
+  .vitrine .foto { transform: rotate(2deg); }
+  .fita-adesiva {
+    position: absolute; top: -14px; left: 50%; width: 110px; height: 30px; margin-left: -55px;
+    background: rgba(242, 163, 181, 0.85); transform: rotate(-3deg); border-radius: 3px;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.08);
+  }
+  .turma { position: absolute; left: 0; right: 0; bottom: -6px; display: flex; justify-content: center; align-items: flex-end; gap: 0; pointer-events: none; }
+  .turma img { width: 27%; max-width: 150px; height: auto; filter: drop-shadow(0 8px 10px rgba(80, 30, 5, 0.3)); animation: pula 2.6s ease-in-out infinite; }
+  .turma img:nth-child(1) { transform-origin: 50% 100%; margin-right: -4%; animation-delay: -0.4s; }
+  .turma img:nth-child(2) { width: 29%; max-width: 162px; z-index: 1; animation-delay: -1.3s; }
+  .turma img:nth-child(3) { margin-left: -4%; animation-delay: -2.1s; }
+  @keyframes pula { 0%, 100% { transform: translateY(0) rotate(-1.5deg); } 50% { transform: translateY(-7px) rotate(1.5deg); } }
+
+  /* a borda de baixo do topo, recortada em ondas como a do menu */
+  .ondas { position: absolute; left: 0; right: 0; bottom: -1px; height: 22px; background: radial-gradient(circle at 16px 22px, var(--papel) 15px, transparent 16px) repeat-x; background-size: 32px 22px; }
+
+  /* ---------- os aparelhos ---------- */
+  main { max-width: 1120px; margin: 0 auto; padding: 40px 16px 24px; }
+  h2 { margin: 0 0 6px; font-weight: 900; font-size: clamp(28px, 4vw, 38px); color: var(--tinta); }
+  .sub { margin: 0 0 28px; color: var(--texto-2); }
+  .cartoes { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 22px; }
+  .cartao {
+    position: relative; background: var(--branco); border: 3px solid var(--borda); border-radius: var(--raio);
+    padding: 22px 22px 20px; box-shadow: 0 6px 0 var(--borda); display: flex; flex-direction: column; gap: 14px;
+  }
+  /* o cartão do aparelho de quem abriu vem primeiro */
+  .cartao.seu { order: -1; border-color: var(--laranja); box-shadow: 0 6px 0 var(--laranja-escuro); }
+  .selo {
+    position: absolute; top: -16px; right: 18px; padding: 5px 14px; border-radius: 999px; font-size: 14px; font-weight: 900;
+    background: var(--rosa-forte); color: #fff; transform: rotate(3deg); box-shadow: 0 3px 0 #b8304f; display: none;
+  }
+  .cartao.seu .selo { display: block; }
+  .cabeca { display: flex; align-items: center; gap: 14px; }
+  .bola {
+    width: 62px; height: 62px; border-radius: 50%; flex: none; display: grid; place-items: center;
+    background: #fff; border: 5px solid var(--cor, var(--menta)); box-shadow: 0 3px 0 rgba(0, 0, 0, 0.08);
+  }
+  .bola svg { width: 32px; height: 32px; }
+  .cartao h3 { margin: 0; font-weight: 900; font-size: 24px; line-height: 1.1; color: var(--tinta); }
+  .cartao .formato { margin: 2px 0 0; font-size: 14px; color: var(--texto-2); }
+  .acoes { display: flex; flex-direction: column; align-items: flex-start; gap: 8px; }
+  .acoes .botao { font-size: 17px; padding: 13px 20px; }
+  .tam { font-weight: 800; opacity: 0.85; font-size: 0.85em; }
+  .tam:empty { display: none; }
+  .alternativa { font-size: 15px; color: var(--texto-2); }
+  .alternativa a { font-weight: 900; color: var(--texto); text-decoration-thickness: 2px; text-underline-offset: 3px; }
+  .falta { opacity: 0.5; pointer-events: none; }
+  .nota { margin-top: auto; background: var(--papel); border-radius: 14px; padding: 12px 14px; font-size: 15px; line-height: 1.45; color: var(--texto); }
+  .nota b { display: block; font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase; color: #c2531a; margin-bottom: 2px; }
+  .nota code { font: 800 13.5px/1.4 ui-monospace, "SFMono-Regular", Menlo, monospace; background: #fff; border: 1px solid var(--borda); border-radius: 6px; padding: 0 4px; white-space: nowrap; }
+
+  /* ---------- como é o jogo ---------- */
+  .galeria { margin-top: 64px; }
+  .fotos { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 30px; margin-top: 30px; }
+  .fotos figure { margin: 0; }
+  .fotos .foto { box-shadow: 0 4px 0 var(--borda), 0 14px 28px rgba(90, 50, 20, 0.12); }
+  .fotos figure:nth-child(1) .foto { transform: rotate(-1.6deg); }
+  .fotos figure:nth-child(2) .foto { transform: rotate(1.2deg); }
+  .fotos figure:nth-child(3) .foto { transform: rotate(-0.8deg); }
+  .fotos figure:nth-child(2) .fita-adesiva { background: rgba(159, 220, 191, 0.85); transform: rotate(4deg); }
+  .fotos figure:nth-child(3) .fita-adesiva { background: rgba(255, 216, 74, 0.8); transform: rotate(-2deg); }
+  .fotos .foto img { aspect-ratio: 4 / 3; object-fit: cover; }
+  .fotos figcaption { margin-top: 16px; text-align: center; font-weight: 900; font-size: 18px; color: var(--tinta); }
+
+  footer { margin-top: 64px; padding: 28px 16px 40px; text-align: center; color: var(--texto-2); font-size: 15px; border-top: 3px dashed var(--borda); }
+  footer p { margin: 4px 0; }
+  footer a { font-weight: 900; color: var(--texto); }
+
+  @media (max-width: 960px) {
+    .topo-dentro { grid-template-columns: 1fr; gap: 26px; padding-top: 40px; }
+    .vitrine { max-width: 560px; margin: 0 auto; width: 100%; }
+    .cartoes { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  }
+  @media (max-width: 640px) {
+    body { font-size: 16px; }
+    .topo { padding-bottom: 56px; }
+    .fitas { width: 200px; height: 200px; }
+    .fitas.esq { left: -100px; top: -96px; }
+    .marca { margin-bottom: 12px; }
+    .icone { width: 68px; height: 68px; border-radius: 20px; }
+    .chamada { font-size: 18px; }
+    .botao.grande { font-size: 20px; padding: 16px 26px 16px 20px; }
+    .cartoes, .fotos { grid-template-columns: 1fr; }
+    .fotos { gap: 34px; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    .turma img { animation: none; }
+    .botao { transition: none; }
+  }
+</style>
+</head>
+<body>
+
+<header class="topo">
+  <!-- as fitas listradas do canto do menu do jogo -->
+  <svg class="fitas esq" viewBox="0 0 340 340" aria-hidden="true">
+    <g transform="rotate(-35 170 170)">
+      <rect x="-80" y="110" width="500" height="34" fill="#f4b6c2"/>
+      <rect x="-80" y="144" width="500" height="34" fill="#9ccff0"/>
+      <rect x="-80" y="178" width="500" height="34" fill="#ffd84a"/>
+      <g stroke="#fff" stroke-width="3" stroke-dasharray="16 10" stroke-linecap="round" opacity="0.8">
+        <line x1="-80" y1="127" x2="420" y2="127"/><line x1="-80" y1="161" x2="420" y2="161"/><line x1="-80" y1="195" x2="420" y2="195"/>
+      </g>
+    </g>
+  </svg>
+  <svg class="fitas dir" viewBox="0 0 340 340" aria-hidden="true">
+    <g transform="rotate(-35 170 170)">
+      <rect x="-80" y="110" width="500" height="34" fill="#f4b6c2"/>
+      <rect x="-80" y="144" width="500" height="34" fill="#9ccff0"/>
+      <rect x="-80" y="178" width="500" height="34" fill="#ffd84a"/>
+      <g stroke="#fff" stroke-width="3" stroke-dasharray="16 10" stroke-linecap="round" opacity="0.8">
+        <line x1="-80" y1="127" x2="420" y2="127"/><line x1="-80" y1="161" x2="420" y2="161"/><line x1="-80" y1="195" x2="420" y2="195"/>
+      </g>
+    </g>
+  </svg>
+
+  <div class="topo-dentro">
+    <div>
+      <div class="marca">
+        <img class="icone" src="imagens/icone-192.png" width="84" height="84" alt="">
+        <p>O jogo da Turma da Eita</p>
+      </div>
+      <h1>A Lanchonete da Turma</h1>
+      <p class="chamada">A turma abriu uma lanchonete! Faça as receitinhas do livro, sirva os amigos que chegam e prepare o Grande Almoço Especial.</p>
+      <a class="botao grande" id="principal" href="#aparelhos">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 4v11M7 10.5l5 5 5-5M5 20h14"/></svg>
+        <span id="principal-texto">Baixar o jogo</span>
+      </a>
+      <p class="detalhe" id="principal-detalhe">Para Windows, Mac, Linux e Android. No iPhone, joga pelo Safari.</p>
+      <p class="outros" id="outros"><a href="#aparelhos">Outros aparelhos</a></p>
+    </div>
+    <div class="vitrine">
+      <figure class="foto">
+        <span class="fita-adesiva" aria-hidden="true"></span>
+        <img src="imagens/salao.webp" width="1200" height="675" alt="O salão da lanchonete: mesas de toalha xadrez rosa, cardápio na lousa e a caixa registradora no balcão">
+      </figure>
+      <div class="turma" aria-hidden="true">
+        <img src="imagens/paneco.webp" width="420" height="467" alt="">
+        <img src="imagens/fritoca.webp" width="420" height="513" alt="">
+        <img src="imagens/panoca.webp" width="420" height="504" alt="">
+      </div>
+    </div>
+  </div>
+  <div class="ondas" aria-hidden="true"></div>
+</header>
+
+<main>
+  <section id="aparelhos" aria-labelledby="t-aparelhos">
+    <h2 id="t-aparelhos">Escolha o aparelho</h2>
+    <p class="sub">Depois de instalado, o jogo funciona sem internet.</p>
+
+    <div class="cartoes">
+      <article class="cartao" data-aparelho="windows">
+        <span class="selo">É o seu!</span>
+        <div class="cabeca">
+          <span class="bola" style="--cor: var(--azul)">
+            <svg viewBox="0 0 32 32" aria-hidden="true"><rect x="3" y="5" width="26" height="18" rx="3" fill="#e8f4fc" stroke="#1f1510" stroke-width="2.5"/><path d="M12 28h8M16 23v5" stroke="#1f1510" stroke-width="2.5" stroke-linecap="round"/><g fill="#3a8fd0"><rect x="10" y="9" width="5" height="4" rx="0.8"/><rect x="17" y="9" width="5" height="4" rx="0.8"/><rect x="10" y="14.5" width="5" height="4" rx="0.8"/><rect x="17" y="14.5" width="5" height="4" rx="0.8"/></g></svg>
+          </span>
+          <div><h3>Windows</h3><p class="formato">Windows 10 e 11</p></div>
+        </div>
+        <div class="acoes">
+          <a class="botao" data-arquivo="TurmaDaEita-Windows-instalador.exe" href="#">Baixar o instalador <span class="tam"></span></a>
+          <span class="alternativa" data-alternativa>ou <a data-arquivo="TurmaDaEita-Windows.exe" href="#">a versão que abre sem instalar</a></span>
+        </div>
+        <p class="nota"><b>Na primeira vez</b>Se aparecer “O Windows protegeu o computador”, clique em <strong>Mais informações</strong> e depois em <strong>Executar assim mesmo</strong>.</p>
+      </article>
+
+      <article class="cartao" data-aparelho="mac">
+        <span class="selo">É o seu!</span>
+        <div class="cabeca">
+          <span class="bola" style="--cor: var(--rosa)">
+            <svg viewBox="0 0 32 32" aria-hidden="true"><rect x="6" y="6" width="20" height="14" rx="2.5" fill="#fde7ee" stroke="#1f1510" stroke-width="2.5"/><path d="M3 24h26l-2 3H5z" fill="#fde7ee" stroke="#1f1510" stroke-width="2.5" stroke-linejoin="round"/><path d="M13 13.5c1.6 1.6 4.4 1.6 6 0" stroke="#f0567a" stroke-width="2.2" stroke-linecap="round" fill="none"/><circle cx="12.5" cy="10.5" r="1.2" fill="#1f1510"/><circle cx="19.5" cy="10.5" r="1.2" fill="#1f1510"/></svg>
+          </span>
+          <div><h3>Mac</h3><p class="formato">Intel e Apple Silicon</p></div>
+        </div>
+        <div class="acoes">
+          <a class="botao" data-arquivo="TurmaDaEita-Mac.dmg" href="#">Baixar para Mac <span class="tam"></span></a>
+        </div>
+        <p class="nota"><b>Na primeira vez</b>Abra o arquivo e arraste a Turma da Eita para Aplicativos. Se o Mac não deixar abrir, vá em <strong>Ajustes do Sistema › Privacidade e Segurança</strong> e clique em <strong>Abrir Mesmo Assim</strong>.</p>
+      </article>
+
+      <article class="cartao" data-aparelho="linux">
+        <span class="selo">É o seu!</span>
+        <div class="cabeca">
+          <span class="bola" style="--cor: var(--amarelo)">
+            <svg viewBox="0 0 32 32" aria-hidden="true"><rect x="3" y="5" width="26" height="18" rx="3" fill="#fff6d0" stroke="#1f1510" stroke-width="2.5"/><path d="M12 28h8M16 23v5" stroke="#1f1510" stroke-width="2.5" stroke-linecap="round"/><path d="M9 11l3.5 3L9 17M15 17.5h6" fill="none" stroke="#c99a00" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </span>
+          <div><h3>Linux</h3><p class="formato">AppImage ou .tar.gz</p></div>
+        </div>
+        <div class="acoes">
+          <a class="botao" data-arquivo="TurmaDaEita-Linux.AppImage" href="#">Baixar o AppImage <span class="tam"></span></a>
+          <span class="alternativa" data-alternativa>ou <a data-arquivo="TurmaDaEita-Linux.tar.gz" href="#">o .tar.gz</a></span>
+        </div>
+        <p class="nota"><b>Na primeira vez</b>Marque o AppImage como executável e abra. No Fedora, instale antes o <code>fuse-libs</code>. O .tar.gz não pede nada: descompacte e abra o <code>turma-da-eita</code>.</p>
+      </article>
+
+      <article class="cartao" data-aparelho="android">
+        <span class="selo">É o seu!</span>
+        <div class="cabeca">
+          <span class="bola" style="--cor: var(--menta)">
+            <svg viewBox="0 0 32 32" aria-hidden="true"><rect x="9" y="3" width="14" height="26" rx="3.5" fill="#e3f6ec" stroke="#1f1510" stroke-width="2.5"/><path d="M14 25.5h4" stroke="#1f1510" stroke-width="2.5" stroke-linecap="round"/><path d="M13 13.5c1.6 1.6 4.4 1.6 6 0" stroke="#2f8f6a" stroke-width="2.2" stroke-linecap="round" fill="none"/><circle cx="13" cy="10.5" r="1.2" fill="#1f1510"/><circle cx="19" cy="10.5" r="1.2" fill="#1f1510"/></svg>
+          </span>
+          <div><h3>Android</h3><p class="formato">Celular e tablet</p></div>
+        </div>
+        <div class="acoes">
+          <a class="botao" data-arquivo="TurmaDaEita-Android.apk" href="#">Baixar para Android <span class="tam"></span></a>
+        </div>
+        <p class="nota"><b>Na primeira vez</b>Abra o arquivo baixado. O celular pergunta se pode instalar apps vindos do navegador: permita e toque em <strong>Instalar</strong>.</p>
+      </article>
+
+      <article class="cartao" data-aparelho="iphone">
+        <span class="selo">É o seu!</span>
+        <div class="cabeca">
+          <span class="bola" style="--cor: var(--rosa)">
+            <svg viewBox="0 0 32 32" aria-hidden="true"><rect x="9" y="3" width="14" height="26" rx="4" fill="#fde7ee" stroke="#1f1510" stroke-width="2.5"/><path d="M13.5 6.5h5" stroke="#1f1510" stroke-width="2.2" stroke-linecap="round"/><path d="M16 21.5c-3-2-4.6-3.6-4.6-5.4a2.3 2.3 0 0 1 4.6-.8 2.3 2.3 0 0 1 4.6.8c0 1.8-1.6 3.4-4.6 5.4z" fill="#f0567a"/></svg>
+          </span>
+          <div><h3>iPhone e iPad</h3><p class="formato">Pelo Safari</p></div>
+        </div>
+        <div class="acoes">
+          <a class="botao" data-jogo href="#">Abrir no Safari</a>
+        </div>
+        <p class="nota"><b>Como instalar</b>Ainda não está na App Store. No Safari, toque em <strong>Compartilhar</strong> e em <strong>Adicionar à Tela de Início</strong>: o jogo ganha o ícone e abre em tela cheia.</p>
+      </article>
+
+      <article class="cartao" data-aparelho="navegador">
+        <span class="selo">É o seu!</span>
+        <div class="cabeca">
+          <span class="bola" style="--cor: var(--ouro)">
+            <svg viewBox="0 0 32 32" aria-hidden="true"><circle cx="16" cy="16" r="12" fill="#fff6d0" stroke="#1f1510" stroke-width="2.5"/><path d="M4 16h24M16 4c-4 3.5-4 20.5 0 24M16 4c4 3.5 4 20.5 0 24" fill="none" stroke="#c99a00" stroke-width="2"/></svg>
+          </span>
+          <div><h3>No navegador</h3><p class="formato">Sem baixar nada</p></div>
+        </div>
+        <div class="acoes">
+          <a class="botao" data-jogo href="#">Jogar agora</a>
+        </div>
+        <p class="nota"><b>Bom saber</b>Funciona no Chrome, no Edge, no Safari e no Firefox, no computador e no tablet. O progresso fica guardado no próprio navegador.</p>
+      </article>
+    </div>
+  </section>
+
+  <section class="galeria" aria-labelledby="t-galeria">
+    <h2 id="t-galeria">Como é o jogo</h2>
+    <div class="fotos">
+      <figure>
+        <div class="foto"><span class="fita-adesiva" aria-hidden="true"></span><img src="imagens/fachada.webp" width="860" height="720" loading="lazy" alt="A fachada da lanchonete com toldo listrado e a Fritóca na porta"></div>
+        <figcaption>A lanchonete abre as portas</figcaption>
+      </figure>
+      <figure>
+        <div class="foto"><span class="fita-adesiva" aria-hidden="true"></span><img src="imagens/cozinha.webp" width="1200" height="675" loading="lazy" alt="A cozinha de brinquedo com fogão, geladeira, bancada e forno de pizza"></div>
+        <figcaption>Na cozinha, a criança faz cada etapa</figcaption>
+      </figure>
+      <figure>
+        <div class="foto"><span class="fita-adesiva" aria-hidden="true"></span><img src="imagens/trilha.webp" width="860" height="720" loading="lazy" alt="A trilha das casinhas coloridas no gramado, cada uma com uma receitinha"></div>
+        <figcaption>Pela trilha, chegam amigos novos</figcaption>
+      </figure>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <p>A Turma da Eita é da <a href="https://www.eitacasaperfeita.com.br/" rel="noopener">Eita Casa Perfeita</a>.</p>
+  <p id="versao"></p>
+</footer>
+
+<script>
+  // Onde ficam os arquivos: os lançamentos do repositório público; o versao.json (gravado pelo
+  // publicar.sh a cada lançamento) diz a versão, o endereço exato e o tamanho de cada um. Sem ele, os
+  // botões apontam para o lançamento mais recente pelo nome fixo do arquivo.
+  const REPO = 'https://github.com/tecnologia-eita/turma-da-eita';
+  const JOGO = 'https://jogo-eita.tqgmkj.easypanel.host/';
+
+  const PRINCIPAL = {
+    windows: { texto: 'Baixar para Windows', arquivo: 'TurmaDaEita-Windows-instalador.exe', nota: 'Windows 10 e 11' },
+    mac: { texto: 'Baixar para Mac', arquivo: 'TurmaDaEita-Mac.dmg', nota: 'Intel e Apple Silicon' },
+    linux: { texto: 'Baixar para Linux', arquivo: 'TurmaDaEita-Linux.AppImage', nota: 'AppImage' },
+    android: { texto: 'Baixar para Android', arquivo: 'TurmaDaEita-Android.apk', nota: 'Celular e tablet' },
+    iphone: { texto: 'Jogar no iPhone', detalhe: 'Abre no Safari. Para instalar: Compartilhar e Adicionar à Tela de Início.' },
+    ipad: { texto: 'Jogar no iPad', detalhe: 'Abre no Safari. Para instalar: Compartilhar e Adicionar à Tela de Início.' },
+    navegador: { texto: 'Jogar no navegador', detalhe: 'Abre direto, sem baixar nada.' },
+  };
+
+  function qualAparelho() {
+    const pedido = new URLSearchParams(location.search).get('aparelho');
+    if (pedido && PRINCIPAL[pedido]) return pedido;
+    const ua = navigator.userAgent || '';
+    const plat = (navigator.userAgentData && navigator.userAgentData.platform) || navigator.platform || '';
+    if (/android/i.test(ua)) return 'android';
+    if (/ipad/i.test(ua) || (/mac/i.test(plat) && navigator.maxTouchPoints > 1)) return 'ipad';
+    if (/iphone|ipod/i.test(ua)) return 'iphone';
+    if (/win/i.test(plat) || /windows/i.test(ua)) return 'windows';
+    if (/mac/i.test(plat) || /mac os x/i.test(ua)) return 'mac';
+    if (/cros/i.test(ua)) return 'navegador';
+    if (/linux/i.test(plat) || /linux/i.test(ua)) return 'linux';
+    return 'navegador';
+  }
+
+  const mb = (n) => (n >= 10485760 ? Math.round(n / 1048576) : (n / 1048576).toFixed(1).replace('.', ',')) + ' MB';
+  const enderecoDe = (nome, v) => (v ? v.base + nome : `${REPO}/releases/latest/download/${nome}`);
+
+  function montar(v) {
+    const ap = qualAparelho();
+    const p = PRINCIPAL[ap];
+    const cartao = document.querySelector(`[data-aparelho="${ap === 'ipad' ? 'iphone' : ap}"]`);
+    document.querySelectorAll('.cartao.seu').forEach((c) => c.classList.remove('seu'));
+    if (cartao) cartao.classList.add('seu');
+
+    document.querySelectorAll('[data-jogo]').forEach((a) => { a.href = JOGO; });
+    document.querySelectorAll('[data-arquivo]').forEach((a) => {
+      const nome = a.dataset.arquivo;
+      const tem = !v || v.arquivos[nome] != null;
+      a.href = enderecoDe(nome, v);
+      const tam = a.querySelector('.tam');
+      if (tam) tam.textContent = v && tem ? mb(v.arquivos[nome]) : '';
+      const alt = a.closest('[data-alternativa]');
+      if (alt) alt.hidden = !tem;
+      else a.classList.toggle('falta', !tem);
+      if (!tem && !alt) a.firstChild.textContent = 'Em breve ';
+    });
+
+    const principal = document.getElementById('principal');
+    document.getElementById('principal-texto').textContent = p.texto;
+    const detalhe = document.getElementById('principal-detalhe');
+    const outros = document.getElementById('outros');
+    if (p.arquivo && (!v || v.arquivos[p.arquivo] != null)) {
+      principal.href = enderecoDe(p.arquivo, v);
+      detalhe.textContent = [v && mb(v.arquivos[p.arquivo]), p.nota].filter(Boolean).join(' · ');
+      outros.innerHTML = `<a href="#aparelhos">Outros aparelhos</a> · <a href="${JOGO}">Jogar no navegador</a>`;
+    } else {
+      principal.href = JOGO;
+      if (p.arquivo) document.getElementById('principal-texto').textContent = 'Jogar no navegador';
+      detalhe.textContent = p.detalhe || 'Abre direto, sem baixar nada.';
+      outros.innerHTML = '<a href="#aparelhos">Baixar para outros aparelhos</a>';
+    }
+
+    if (v) {
+      const [a, m, d] = v.data.split('-');
+      document.getElementById('versao').textContent = `Versão ${v.versao}, de ${d}/${m}/${a}.`;
+    }
+  }
+
+  montar(null);
+  fetch('versao.json', { cache: 'no-cache' })
+    .then((r) => (r.ok ? r.json() : null))
+    .then((v) => { if (v && v.arquivos) montar(v); })
+    .catch(() => {});
+</script>
+</body>
+</html>
