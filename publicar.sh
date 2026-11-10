@@ -45,7 +45,11 @@ echo "versão $VERSAO, de $DATA"
 
 NOTAS="O jogo da Turma da Eita, versão $VERSAO. Para baixar e ver como instalar: https://tecnologia-eita.github.io/turma-da-eita/"
 if gh release view "v$VERSAO" -R "$AQUI" >/dev/null 2>&1; then
-  gh release upload "v$VERSAO" -R "$AQUI" --clobber "$T"/pub/*
+  # o lançamento já existe: sobe só o que falta ou mudou de tamanho
+  JA=$(gh release view "v$VERSAO" -R "$AQUI" --json assets -q '.assets[] | "\(.name) \(.size)"')
+  for f in "$T"/pub/*; do
+    grep -qxF "$(basename "$f") $(stat -c %s "$f")" <<<"$JA" || gh release upload "v$VERSAO" -R "$AQUI" --clobber "$f"
+  done
 else
   gh release create "v$VERSAO" -R "$AQUI" --title "Turma da Eita $VERSAO" --notes "$NOTAS" "$T"/pub/*
 fi
