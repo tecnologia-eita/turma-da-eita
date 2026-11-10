@@ -54,16 +54,30 @@ else
   gh release create "v$VERSAO" -R "$AQUI" --title "Turma da Eita $VERSAO" --notes "$NOTAS" "$T"/pub/*
 fi
 
-python3 - "$T/pub" "$VERSAO" "$DATA" > versao.json <<'PY'
+# o aparelho que faltou nesta rodada (o Mac fica na fila do GitHub e às vezes é cancelado) continua
+# com o arquivo da versão anterior, pelo endereço dela, até uma rodada nova trazer o dele
+python3 - "$T/pub" "$VERSAO" "$DATA" versao.json > "$T/versao.json" <<'PY'
 import json, os, sys
-pasta, versao, data = sys.argv[1:4]
-print(json.dumps({
+pasta, versao, data, antigo = sys.argv[1:5]
+novo = {
     "versao": versao,
     "data": data,
     "base": f"https://github.com/tecnologia-eita/turma-da-eita/releases/download/v{versao}/",
     "arquivos": {f: os.path.getsize(os.path.join(pasta, f)) for f in sorted(os.listdir(pasta))},
-}, indent=2, ensure_ascii=False))
+}
+enderecos = {}
+if os.path.exists(antigo):
+    v = json.load(open(antigo, encoding="utf-8"))
+    for f, tam in v.get("arquivos", {}).items():
+        if f not in novo["arquivos"] and v["versao"] != versao:
+            novo["arquivos"][f] = tam
+            enderecos[f] = v.get("enderecos", {}).get(f, v["base"] + f)
+            print(f"({f} continua o da versão {v['versao']})", file=sys.stderr)
+if enderecos:
+    novo["enderecos"] = enderecos
+print(json.dumps(novo, indent=2, ensure_ascii=False))
 PY
+mv "$T/versao.json" versao.json
 git add versao.json
 git commit -m "versão $VERSAO"
 git push
