@@ -14,17 +14,17 @@ trap 'rm -rf "$T"' EXIT
 
 R=${2:-$T/rodada}
 if [ -z "${2:-}" ]; then
-  # o download dos artefatos às vezes devolve 503 ("Egress is over the account limit"): tenta de novo.
-  # Só os que a rodada tem (o Mac pode ter sido cancelado na fila do GitHub)
-  TEM=$(gh api "repos/$JOGO/actions/runs/$RODADA/artifacts" -q '.artifacts[] | select(.expired | not) | .name')
+  # Só os que a rodada tem (o Mac pode ter sido cancelado na fila do GitHub). O download vai em
+  # pedaços por várias conexões (baixar-artefato.py): pelo `gh run download`, de uma conexão só, o
+  # armazenamento dos artefatos chegou a segurar em 100 KB/s
+  TEM=$(gh api "repos/$JOGO/actions/runs/$RODADA/artifacts" -q '.artifacts[] | select(.expired | not) | "\(.name) \(.id)"')
   for n in Windows Mac Linux Android; do
-    grep -qx "turma-da-eita-$n" <<<"$TEM" || { echo "(a rodada não tem $n)"; continue; }
-    for t in 1 2 3 4 5; do
-      rm -rf "${R:?}/$n"
-      gh run download "$RODADA" -R "$JOGO" -n "turma-da-eita-$n" -D "$R/$n" && [ -n "$(ls "$R/$n")" ] && break
-      [ "$t" = 5 ] && { echo "não consegui baixar $n"; exit 1; }
-      sleep 20
-    done
+    ID=$(awk -v n="turma-da-eita-$n" '$1 == n { print $2 }' <<<"$TEM")
+    [ -n "$ID" ] || { echo "(a rodada não tem $n)"; continue; }
+    mkdir -p "$R/$n"
+    python3 ./baixar-artefato.py "$JOGO" "$ID" "$T/$n.zip"
+    unzip -q -o "$T/$n.zip" -d "$R/$n"
+    rm -f "$T/$n.zip"
   done
 fi
 
@@ -58,7 +58,7 @@ else
 fi
 
 # o aparelho que faltou nesta rodada (o Mac fica na fila do GitHub e às vezes é cancelado) continua
-# com o arquivo da versão anterior, pelo endereço dela, até uma rodada nova trazer o dele
+# com o arquivo que já estava na página, pelo endereço dele, até uma rodada trazer o dele
 python3 - "$T/pub" "$VERSAO" "$DATA" versao.json > "$T/versao.json" <<'PY'
 import json, os, sys
 pasta, versao, data, antigo = sys.argv[1:5]
@@ -72,10 +72,12 @@ enderecos = {}
 if os.path.exists(antigo):
     v = json.load(open(antigo, encoding="utf-8"))
     for f, tam in v.get("arquivos", {}).items():
-        if f not in novo["arquivos"] and v["versao"] != versao:
+        if f not in novo["arquivos"]:
             novo["arquivos"][f] = tam
-            enderecos[f] = v.get("enderecos", {}).get(f, v["base"] + f)
-            print(f"({f} continua o da versão {v['versao']})", file=sys.stderr)
+            e = v.get("enderecos", {}).get(f, v["base"] + f)
+            if e != novo["base"] + f:
+                enderecos[f] = e
+                print(f"({f} continua o de {e.split('/')[-2]})", file=sys.stderr)
 if enderecos:
     novo["enderecos"] = enderecos
 print(json.dumps(novo, indent=2, ensure_ascii=False))
