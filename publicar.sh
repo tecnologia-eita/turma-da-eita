@@ -14,8 +14,11 @@ trap 'rm -rf "$T"' EXIT
 
 R=${2:-$T/rodada}
 if [ -z "${2:-}" ]; then
-  # o download dos artefatos às vezes devolve 503 ("Egress is over the account limit"): tenta de novo
+  # o download dos artefatos às vezes devolve 503 ("Egress is over the account limit"): tenta de novo.
+  # Só os que a rodada tem (o Mac pode ter sido cancelado na fila do GitHub)
+  TEM=$(gh api "repos/$JOGO/actions/runs/$RODADA/artifacts" -q '.artifacts[] | select(.expired | not) | .name')
   for n in Windows Mac Linux Android; do
+    grep -qx "turma-da-eita-$n" <<<"$TEM" || { echo "(a rodada não tem $n)"; continue; }
     for t in 1 2 3 4 5; do
       rm -rf "${R:?}/$n"
       gh run download "$RODADA" -R "$JOGO" -n "turma-da-eita-$n" -D "$R/$n" && [ -n "$(ls "$R/$n")" ] && break
