@@ -1,13 +1,13 @@
 {
-  "versao": "0.1.6",
-  "data": "2026-11-10",
-  "base": "https://github.com/tecnologia-eita/turma-da-eita/releases/download/v0.1.6/",
+  "versao": "0.1.7",
+  "data": "2026-11-11",
+  "base": "https://github.com/tecnologia-eita/turma-da-eita/releases/download/v0.1.7/",
   "arquivos": {
-    "TurmaDaEita-Android.apk": 33795264,
-    "TurmaDaEita-Linux.AppImage": 139076828,
-    "TurmaDaEita-Linux.tar.gz": 131898006,
-    "TurmaDaEita-Mac.dmg": 213229457,
-    "TurmaDaEita-Windows-instalador.exe": 110405124,
-    "TurmaDaEita-Windows.exe": 110176751
+    "TurmaDaEita-Android.apk": 33815744,
+    "TurmaDaEita-Linux.AppImage": 139097347,
+    "TurmaDaEita-Linux.tar.gz": 131915168,
+    "TurmaDaEita-Mac.dmg": 213233639,
+    "TurmaDaEita-Windows-instalador.exe": 110422447,
+    "TurmaDaEita-Windows.exe": 110194080
   }
 }
